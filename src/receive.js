@@ -21,18 +21,41 @@ const query = {
 
 const delay = 3000;
 
-// retriece the message
-// remove the last tryte of the signatureMessageFragment that has a length of 2187 trytes before converting it to ASCII
-iota
-  .findTransactionObjects(query)
-  .then(transactions => {
-    transactions.map(transaction => {
-      const msg = Converter.trytesToAscii(
-        transaction.signatureMessageFragment.replace(/9*$/, "")
-      );
-      console.log(msg);
+// // retriece the message
+// // remove the last tryte of the signatureMessageFragment that has a length of 2187 trytes before converting it to ASCII
+// iota
+//   .findTransactionObjects(query)
+//   .then(transactions => {
+//     transactions.map(transaction => {
+//       const msg = Converter.trytesToAscii(
+//         transaction.signatureMessageFragment.replace(/9*$/, "")
+//       );
+//       console.log(msg);
+//     });
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   });
+
+// automatically receive messages
+const messages = {};
+const findMessages = () => {
+  iota
+    .findTransactionObjects(query)
+    .then(transactions => {
+      transactions.map(transaction => {
+        if (typeof messages[transaction.hash] == "undefined") {
+          const msg = Converter.trytesToAscii(
+            transaction.signatureMessageFragment.replace(/9*$/, "")
+          );
+          messages[transaction.hash] = msg;
+          console.log(msg);
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
     });
-  })
-  .catch(err => {
-    console.log(err);
-  });
+};
+
+setInterval(() => findMessages(), delay);
