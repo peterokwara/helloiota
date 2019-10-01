@@ -34,8 +34,19 @@ const transfers = [
   }
 ];
 
-// create the transaction
-// prepare transfers takes in an array of transaction data and returns the trytes of the resulting bundle
+// // create the transaction
+// // prepare transfers takes in an array of transaction data and returns the trytes of the resulting bundle
+// iota
+//   .prepareTransfers(seed, transfers)
+//   .then(trytes => trytes.map(hash => console.log(TransactionConverter.asTransactionObject(hash))));
+
+// the sendTrytes performs the tip selection, assembles the bundle and sends it to the full node where the proof of work is perfomed
 iota
   .prepareTransfers(seed, transfers)
-  .then(trytes => trytes.map(hash => console.log(TransactionConverter.asTransactionObject(hash))));
+  .then(trytes => iota.sendTrytes(trytes, depth, minWeightMagnitude))
+  .then(bundle => {
+    console.log(bundle);
+  })
+  .catch(err => {
+    console.log(err);
+  });
