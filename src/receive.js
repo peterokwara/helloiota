@@ -3,7 +3,7 @@ const Converter = require("@iota/converter");
 
 // set up the node api we are getting information on
 const iota = Iota.composeAPI({
-  provider: "https://nodes.devnet.iota.org:443"
+  provider: "https://nodes.devnet.thetangle.org:443"
 });
 
 // address we want to get information from
